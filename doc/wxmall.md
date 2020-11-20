@@ -233,7 +233,7 @@ var WxApiRoot = 'http://localhost:8082/wx/';
 // 局域网测试使用
 // var WxApiRoot = 'http://192.168.0.101:8082/wx/';
 // 云平台部署时使用
-//  var WxApiRoot = 'http://122.51.199.160:8082/wx/';
+//  var WxApiRoot = 'http://139.159.213.28:8082/wx/';
 ```
 
 也就是说这里存在三种类型的API服务地址，这里是考虑到开发存在三种情况：
