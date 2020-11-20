@@ -151,7 +151,66 @@ litemall = Spring Boot后端 + Vue管理员前端 + 微信小程序用户前端 
 
     注意：
     > 现在功能很不稳定，处在开发阶段。
-        
+7. 使用docker部署
+
+    Dockerfile:FROM java:8
+               # 作者
+               MAINTAINER eangulee <eangulee@gmail.com>
+               # VOLUME 指定了临时文件目录为/tmp。
+               # 其效果是在主机 /var/lib/docker 目录下创建了一个临时文件，并链接到容器的/tmp
+               VOLUME /tmp 
+               # 将jar包添加到容器中并更名为app.jar
+               ADD litemall-wx-api-0.1.0-exec.jar  app.jar 
+               # 运行jar包
+               RUN bash -c 'touch /app.jar'
+               ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+
+    litemall-admin-api:docker run -d --name litemalladminweb -p 8083:8083 litemalladminweb
+    litemall-wx-api:docker run -d --name  litemall-wx-api -p  8082:8082  litemall-wx-api   
+    litemall-vue:docker run -d --name  litemall-vue -p  9527:80  litemall-vue
+                 bloog.conf[events {
+                                worker_connections 1024;
+                            }
+                            
+                            http {
+                             include             mime.types;
+                             
+                             default_type        application/octet-stream;
+                             
+                             sendfile            on;
+                             
+                             keepalive_timeout 65;
+                             
+                             client_max_body_size 20m;
+                             
+                             ###### blogapp begin #######
+                                server {
+                                    listen       80;
+                                    server_name  localhost;
+                                    location / {
+                            			root /usr/share/nginx/html; #配置Vue项目根路径,与
+                            			index index.html index.html; #配置首页
+                            			try_files $uri $uri/ /index.html; #防止刷新报404
+                                    }
+                            
+                                    #error_page 404 /404.html;
+                                        #location = /40x.html {
+                                    #}
+                            
+                                    error_page 500 502 503 504 /50x.html;
+                                        location = /50x.html {
+                            			root html;
+                                    }
+                                }
+                              ###### blogapp end #######
+                             }
+]
+                 Dockerfile:[FROM nginx #标准的nginx镜像,我们需要基于标准的nginx镜像制作自己的镜像
+                             MAINTAINER blogapp #设置生成镜像的Author 
+                             COPY . /usr/share/nginx/html/ #拷贝当前目录的文件到指定文件夹下，改文件夹为镜像中的文件夹
+                             COPY blogapp.conf /etc/nginx/nginx.conf #拷贝.conf文件到镜像下，替换掉原有的nginx.conf
+                             RUN echo 'build img ok!' #输出完成
+]
 ## 开发计划
 
 当前版本[v1.7.0](https://linlinjava.gitbook.io/litemall/changelog)
