@@ -44,7 +44,7 @@ public class AdminStorageController {
     }
 
     @RequiresPermissions("admin:storage:create")
-    @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "上传")
+    @RequiresPermissionsDesc(menu = {"系统管理", "对象存储"}, button = "")
     @PostMapping("/create")
     public Object create(@RequestParam("file") MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
